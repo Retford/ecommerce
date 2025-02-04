@@ -37,7 +37,7 @@ export default async function OrdersPagePerID({ params }: Props) {
               )}
             >
               <IoCartOutline size={30} />
-              <span className='mx-2'>Pendiente de pago</span>
+              {/* <span className='mx-2'>Pendiente de pago</span> */}
               <span className='mx-2'>Pagada</span>
             </div>
             {/* Items */}
@@ -98,7 +98,7 @@ export default async function OrdersPagePerID({ params }: Props) {
                 )}
               >
                 <IoCartOutline size={30} />
-                <span className='mx-2'>Pendiente de pago</span>
+                {/* <span className='mx-2'>Pendiente de pago</span> */}
                 <span className='mx-2'>Pagada</span>
               </div>
             </div>
