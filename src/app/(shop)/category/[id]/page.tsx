@@ -2,7 +2,8 @@
 
 import { ProductGrid } from '@/components/products/product-grid/ProductGrid';
 import { Title } from '@/components/ui/title/Title';
-import { initialData, Category } from '@/seed/seed';
+import { Category } from '@/interfaces/product.interface';
+import { initialData } from '@/seed/seed';
 
 interface Props {
   params: Promise<{ id: Category }>;
