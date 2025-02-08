@@ -3,7 +3,7 @@
 import { generatePaginationNumbers } from '@/utils/generatePaginationNumbers';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { redirect, usePathname, useSearchParams } from 'next/navigation';
 import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 
 interface Props {
@@ -14,7 +14,11 @@ export const Pagination = ({ totalPages }: Props) => {
   const pathName = usePathname();
   const searchParams = useSearchParams();
 
-  const currentPage = Number(searchParams.get('page')) ?? 1;
+  const pageString = searchParams.get('page') ?? 1;
+  const currentPage = isNaN(+pageString) ? redirect('/') : +pageString;
+  if (currentPage < 1) {
+    redirect('/');
+  }
 
   const allPages = generatePaginationNumbers(currentPage, totalPages);
 
@@ -63,21 +67,6 @@ export const Pagination = ({ totalPages }: Props) => {
                 href={createPageUrl(page)}
               >
                 {page} <span className='visually-hidden'></span>
-              </Link>
-            </li>
-          ))}
-
-          {Array.from({ length: totalPages }).map((_, index) => (
-            <li className='page-item active' key={index}>
-              <Link
-                className={`page-link relative block py-1.5 px-3 rounded border-0 outline-none transition-all duration-300 text-black hover:text-white hover:bg-blue-600 focus:shadow-md ${
-                  currentPage === index + 1
-                    ? 'bg-blue-600 !text-white'
-                    : 'text-white'
-                }`}
-                href={`/?page=${index + 1}`}
-              >
-                {index + 1} <span className='visually-hidden'></span>
               </Link>
             </li>
           ))}
