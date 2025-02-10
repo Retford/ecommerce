@@ -1,4 +1,5 @@
-// import { notFound } from 'next/navigation';
+export const revalidate = 60;
+export const dynamic = 'force-static';
 
 import { getPaginatedProductsWithImages } from '@/actions/products/product-pagination';
 import { ProductGrid } from '@/components/products/product-grid/ProductGrid';
@@ -12,7 +13,7 @@ interface Props {
   searchParams: Promise<{ page: string }>;
 }
 
-export default async function CategoryPage({ params, searchParams }: Props) {
+export default async function GenderByIdPage({ params, searchParams }: Props) {
   const { gender } = await params;
 
   const labels: Record<string, string> = {

@@ -1,19 +1,22 @@
+// export const revalidate = 604800;
+
 import { notFound } from 'next/navigation';
 
 import { titleFont } from '@/config/fonts';
-import { initialData } from '@/seed/seed';
 import { SizeSelector } from '@/components/product/size-selector/SizeSelector';
 import { QuantitySelector } from '@/components/product/quantity-selector/QuantitySelector';
 import { ProductSlideshow } from '@/components/product/slideShow/ProductSlideshow';
 import { ProductMobileSlideshow } from '@/components/product/slideShow/ProductMobileSlideshow';
+import { getProductBySlug } from '@/actions/products/get-product-by-slug';
+import { StockLabel } from '@/components/product/stock-label/StockLabel';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export default async function ProductPage({ params }: Props) {
+export default async function ProductBySlugPage({ params }: Props) {
   const { slug } = await params;
-  const product = initialData.products.find((product) => product.slug === slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     notFound();
@@ -41,6 +44,7 @@ export default async function ProductPage({ params }: Props) {
         <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>
           {product.title}
         </h1>
+        <StockLabel slug={product.slug} />
         <p className='text-lg mb-5'>${product.price.toFixed(2)}</p>
         {/* Selector de tallas */}
         <SizeSelector
