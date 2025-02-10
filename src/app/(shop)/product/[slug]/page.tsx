@@ -7,12 +7,11 @@ import type {
 } from 'next';
 
 import { titleFont } from '@/config/fonts';
-import { SizeSelector } from '@/components/product/size-selector/SizeSelector';
-import { QuantitySelector } from '@/components/product/quantity-selector/QuantitySelector';
 import { ProductSlideshow } from '@/components/product/slideShow/ProductSlideshow';
 import { ProductMobileSlideshow } from '@/components/product/slideShow/ProductMobileSlideshow';
 import { getProductBySlug } from '@/actions/products/get-product-by-slug';
 import { StockLabel } from '@/components/product/stock-label/StockLabel';
+import { AddToCart } from './ui/AddToCart';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -70,15 +69,7 @@ export default async function ProductBySlugPage({ params }: Props) {
         </h1>
         <StockLabel slug={product.slug} />
         <p className='text-lg mb-5'>${product.price.toFixed(2)}</p>
-        {/* Selector de tallas */}
-        <SizeSelector
-          selectedSize={product.sizes[0]}
-          availableSizes={product.sizes}
-        />
-        {/* Selector de cantidad */}
-        <QuantitySelector quantity={2} />
-        {/* Button */}
-        <button className='btn-primary my-5'>Agregar al carrito</button>
+        <AddToCart product={product} />
         {/* descripción */}
         <h3 className='font-bold text-sm'>Descripción</h3>
         <p className='font-light'>{product.description}</p>
