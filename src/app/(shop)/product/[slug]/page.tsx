@@ -1,6 +1,10 @@
 // export const revalidate = 604800;
 
 import { notFound } from 'next/navigation';
+import type {
+  Metadata,
+  // ResolvingMetadata
+} from 'next';
 
 import { titleFont } from '@/config/fonts';
 import { SizeSelector } from '@/components/product/size-selector/SizeSelector';
@@ -12,6 +16,26 @@ import { StockLabel } from '@/components/product/stock-label/StockLabel';
 
 interface Props {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: Props): // parent: ResolvingMetadata
+Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
+
+  console.log(product?.images[1]);
+
+  return {
+    title: product?.title ?? 'Producto no encontrado',
+    description: product?.description ?? '',
+    openGraph: {
+      title: product?.title ?? '',
+      description: product?.description ?? '',
+      images: [`/products/${product?.images[1]}`],
+    },
+  };
 }
 
 export default async function ProductBySlugPage({ params }: Props) {

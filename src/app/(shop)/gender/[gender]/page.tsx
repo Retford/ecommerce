@@ -1,6 +1,8 @@
 export const revalidate = 60;
 export const dynamic = 'force-static';
 
+import type { Metadata } from 'next';
+
 import { getPaginatedProductsWithImages } from '@/actions/products/product-pagination';
 import { ProductGrid } from '@/components/products/product-grid/ProductGrid';
 import { Pagination } from '@/components/ui/pagination/Pagination';
@@ -13,11 +15,26 @@ interface Props {
   searchParams: Promise<{ page: string }>;
 }
 
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const labels: Record<string, string> = {
+    men: 'Hombres',
+    women: 'Mujeres',
+    kid: 'Niños',
+    unisex: 'Unisex',
+  };
+
+  const { gender } = await params;
+
+  return {
+    title: labels[gender],
+  };
+}
+
 export default async function GenderByIdPage({ params, searchParams }: Props) {
   const { gender } = await params;
 
   const labels: Record<string, string> = {
-    men: 'para hombres',
+    men: 'para Hombres',
     women: 'para Mujeres',
     kid: 'para Niños',
     unisex: 'para todos',
