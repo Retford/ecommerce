@@ -12,8 +12,6 @@ export const LoginForm = () => {
     undefined
   );
 
-  console.log({ errorMessage, formAction, isPending });
-
   return (
     <form action={formAction} className='flex flex-col'>
       <label htmlFor='email'>Correo electrónico</label>
