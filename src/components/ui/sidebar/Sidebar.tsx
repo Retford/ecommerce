@@ -5,6 +5,7 @@ import { useUIStore } from '@/store/ui/ui-store';
 import clsx from 'clsx';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
   IoCloseOutline,
   IoLogInOutline,
@@ -17,6 +18,7 @@ import {
 } from 'react-icons/io5';
 
 export const SideBar = () => {
+  const searchParams = useSearchParams();
   const isSideMenuOpen = useUIStore((state) => state.isSideMenuOpen);
   const closeMenu = useUIStore((state) => state.closeSideMenu);
 
@@ -24,6 +26,10 @@ export const SideBar = () => {
   const isAuthenticated = !!session?.user;
 
   const isAdmin = session?.user.role === 'admin';
+
+  if (searchParams.has('auth')) {
+    window.location.replace('/');
+  }
 
   return (
     <div>
