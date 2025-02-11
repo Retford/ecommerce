@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { inter } from '@/config/fonts';
 
 import './globals.css';
+import { Provider } from '@/components/provider/Provider';
 
 export const metadata: Metadata = {
   title: {
@@ -18,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='es'>
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <body className={`${inter.className} antialiased`}>
+        <Provider>{children}</Provider>
+      </body>
     </html>
   );
 }
