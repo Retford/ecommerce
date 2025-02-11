@@ -12,6 +12,7 @@ import { ProductMobileSlideshow } from '@/components/product/slideShow/ProductMo
 import { getProductBySlug } from '@/actions/products/get-product-by-slug';
 import { StockLabel } from '@/components/product/stock-label/StockLabel';
 import { AddToCart } from './ui/AddToCart';
+import { currencyFormat } from '@/utils/currencyFormat';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -68,7 +69,7 @@ export default async function ProductBySlugPage({ params }: Props) {
           {product.title}
         </h1>
         <StockLabel slug={product.slug} />
-        <p className='text-lg mb-5'>${product.price.toFixed(2)}</p>
+        <p className='text-lg mb-5'>{currencyFormat(product.price)}</p>
         <AddToCart product={product} />
         {/* descripción */}
         <h3 className='font-bold text-sm'>Descripción</h3>

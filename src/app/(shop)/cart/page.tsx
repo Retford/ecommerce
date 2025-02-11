@@ -1,6 +1,7 @@
 import { Title } from '@/components/ui/title/Title';
 import Link from 'next/link';
 import { ProductsInCart } from './ui/ProductsInCart';
+import { OrderSummary } from './ui/OrderSummary';
 // import { redirect } from 'next/navigation';
 
 export default function CartPage() {
@@ -24,19 +25,7 @@ export default function CartPage() {
           {/* Checkout -Summary */}
           <div className='bg-white rounded-xl shadow-xl p-7 h-fit'>
             <h2 className='text-2xl mb-2'>Resumen de Orden</h2>
-            <div className='grid grid-cols-2'>
-              <span>No. Productos</span>
-              <span className='text-right'>3 artículos</span>
-
-              <span>Subtotal</span>
-              <span className='text-right'>$ 100.00</span>
-
-              <span>Impuestos (15%)</span>
-              <span className='text-right'>$ 100.00</span>
-
-              <span className='mt-5 text-2xl'>Total:</span>
-              <span className='mt-5 text-2xl text-right'>$ 100.00</span>
-            </div>
+            <OrderSummary />
             <div className='mt-5 mb-2 w-full'>
               <Link
                 href='/checkout/address'
