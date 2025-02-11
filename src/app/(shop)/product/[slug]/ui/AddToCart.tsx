@@ -23,8 +23,7 @@ export const AddToCart = ({ product }: Props) => {
 
   const addToCart = () => {
     setPosted(true);
-    if (!size) return console.log('Seleccione una talla');
-    console.log(size, quantity);
+    if (!size) return;
     // Todo: add to cart
     const cartProduct: CartProduct = {
       id: product.id,
