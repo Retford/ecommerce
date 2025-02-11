@@ -7,7 +7,6 @@ import { useActionState } from 'react';
 import { BsExclamationCircle } from 'react-icons/bs';
 
 export const LoginForm = () => {
-  // const [state, dispatch] = useActionState(authenticate, undefined);
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined
