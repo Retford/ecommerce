@@ -9,10 +9,6 @@ export const registerUser = async (
   password: string
 ) => {
   try {
-    console.log('datos recibidos: ', { name, email, password });
-    if (!name || !email || !password) {
-      throw new Error('Todos los campos son obligatorios');
-    }
     const user = await prisma.user.create({
       data: {
         name: name,
