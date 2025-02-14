@@ -4,6 +4,17 @@ import prisma from '@/lib/prisma';
 
 export const deleteUserAddress = async (userId: string) => {
   try {
+    const existingAddress = await prisma.userAddress.findUnique({
+      where: { userId },
+    });
+
+    if (!existingAddress) {
+      return {
+        ok: true,
+        message: 'No hay dirección guardada',
+      };
+    }
+
     await prisma.userAddress.delete({ where: { userId: userId } });
 
     return {

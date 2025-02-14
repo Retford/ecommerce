@@ -25,8 +25,6 @@ Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
 
-  console.log(product?.images[1]);
-
   return {
     title: product?.title ?? 'Producto no encontrado',
     description: product?.description ?? '',
