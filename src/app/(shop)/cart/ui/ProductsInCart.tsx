@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { QuantitySelector } from '@/components/product/quantity-selector/QuantitySelector';
 import { useCartStore } from '@/store/cart/cart-store';
 import Link from 'next/link';
-import { currencyFormat } from '../../../../utils/currencyFormat';
+import { currencyFormat } from '@/utils/currencyFormat';
 
 export const ProductsInCart = () => {
   const updateProductQuantity = useCartStore(
