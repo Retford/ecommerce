@@ -42,7 +42,7 @@ export const getOrderById = async (id: string) => {
       },
     });
 
-    if (!order) throw `El ${id} no existe`;
+    if (!order) throw new Error(`El ${id} no existe`);
 
     if (session.user.role === 'user') {
       if (session.user.id !== order.userId) {
