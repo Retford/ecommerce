@@ -39,6 +39,7 @@ export default async function OrdersPagePerID({ params }: Props) {
             total={total}
             orderAddress={orderAddress}
             payment={payment}
+            id={id}
           />
         </div>
       </div>

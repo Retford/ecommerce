@@ -7,17 +7,19 @@ interface Props {
 
 export const NotificationPay = ({ payment }: Props) => {
   return (
-    <div
-      className={clsx(
-        'flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5',
-        {
-          'bg-red-500': !payment,
-          'bg-green-700': payment,
-        }
-      )}
-    >
-      <IoCartOutline size={30} />
-      <span className='mx-2'>{payment ? 'Pagada' : 'Pendiente de pago'}</span>
-    </div>
+    <>
+      <div
+        className={clsx(
+          'flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5',
+          {
+            'bg-red-500': !payment,
+            'bg-green-700': payment,
+          }
+        )}
+      >
+        <IoCartOutline size={30} />
+        <span className='mx-2'>{payment ? 'Pagada' : 'Pendiente de pago'}</span>
+      </div>
+    </>
   );
 };
