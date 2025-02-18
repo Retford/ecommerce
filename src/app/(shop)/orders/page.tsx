@@ -5,15 +5,30 @@ import { Title } from '@/components/ui/title/Title';
 import { redirect } from 'next/navigation';
 import { IoCardOutline } from 'react-icons/io5';
 import { getOrdersByUser } from '@/actions/order/get-orders-by-user';
+import { Pagination } from '@/components/ui/pagination/Pagination';
 
-export default async function OrdersPage() {
+interface Props {
+  searchParams: Promise<{ page: string }>;
+}
+
+export default async function OrdersPage({ searchParams }: Props) {
+  const pages = (await searchParams).page;
+  const page = pages ? parseInt(pages) : 1;
+
   const session = await auth();
 
   if (session === null) {
     redirect('/auth/login');
   }
 
-  const { ok, orders = [] } = await getOrdersByUser(session!.user.id);
+  const {
+    ok,
+    orders = [],
+    totalPages = 1,
+  } = await getOrdersByUser({
+    userId: session!.user.id,
+    page: page,
+  });
 
   if (!ok) {
     redirect('/auth/login');
@@ -100,6 +115,7 @@ export default async function OrdersPage() {
             )}
           </tbody>
         </table>
+        <Pagination totalPages={totalPages} />
       </div>
     </>
   );
