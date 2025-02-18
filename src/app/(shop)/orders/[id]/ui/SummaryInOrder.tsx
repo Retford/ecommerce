@@ -1,7 +1,7 @@
 'use client';
 
+import { NotificationPay } from '@/components/order/notification-pay/NotificationPay';
 import { PayPalButton } from '@/components/paypal/PayPalButton';
-// import { NotificationPay } from '@/components/order/notification-pay/NotificationPay';
 import { currencyFormat } from '@/utils/currencyFormat';
 
 interface Props {
@@ -25,7 +25,7 @@ interface Props {
 
 export const SummaryInOrder = ({
   orderAddress,
-  // payment,
+  payment,
   itemsInOrder,
   id,
   subTotal,
@@ -68,8 +68,11 @@ export const SummaryInOrder = ({
         </span>
       </div>
       <div className='mt-5 mb-2 w-full'>
-        <PayPalButton amount={total} orderId={id} />
-        {/* <NotificationPay payment={payment} /> */}
+        {payment ? (
+          <NotificationPay payment={payment} />
+        ) : (
+          <PayPalButton amount={total} orderId={id} />
+        )}
       </div>
     </div>
   );

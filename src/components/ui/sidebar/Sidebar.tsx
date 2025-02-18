@@ -32,24 +32,24 @@ export const SideBar = () => {
   }
 
   return (
-    <div>
+    <>
       {/* Background black */}
       {isSideMenuOpen && (
-        <div className='fixed top-0 left-0 w-screen h-screen z-10 bg-black opacity-30' />
+        <div className='fixed top-0 left-0 w-screen h-screen z-[101] bg-black opacity-30' />
       )}
 
       {/* Blur */}
       {isSideMenuOpen && (
         <div
           onClick={closeMenu}
-          className='fade-in fixed top-0 left-0 w-screen h-screen z-10 backdrop-filter backdrop-blur-sm'
+          className='fade-in fixed top-0 left-0 w-screen h-screen z-[101] backdrop-filter backdrop-blur-sm'
         />
       )}
 
       {/* SideMenu */}
       <nav
         className={clsx(
-          'fixed p-5 right-0 top-0 w-[500px] h-screen bg-white z-20 shadow-2xl transform transition-all duration-500',
+          'fixed p-5 right-0 top-0 w-[500px] h-screen bg-white z-[105] shadow-2xl transform transition-all duration-500',
           {
             'translate-x-full': !isSideMenuOpen,
           }
@@ -147,6 +147,6 @@ export const SideBar = () => {
           </>
         )}
       </nav>
-    </div>
+    </>
   );
 };
