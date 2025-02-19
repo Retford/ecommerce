@@ -4,13 +4,11 @@ import { auth } from '@/auth.config';
 import prisma from '@/lib/prisma';
 
 interface OrderOptions {
-  userId: string;
   page?: number;
   take?: number;
 }
 
-export const getOrdersByUser = async ({
-  userId,
+export const getPaginatedOrders = async ({
   page = 1,
   take = 12,
 }: OrderOptions) => {
@@ -20,7 +18,7 @@ export const getOrdersByUser = async ({
   try {
     const session = await auth();
 
-    if (!session?.user) {
+    if (session?.user.role !== 'admin') {
       return {
         ok: false,
         message: 'Debe de estar autenticado',
@@ -29,7 +27,9 @@ export const getOrdersByUser = async ({
 
     const [orders, totalCount] = await prisma.$transaction([
       prisma.order.findMany({
-        where: { userId },
+        orderBy: {
+          createdAt: 'desc',
+        },
         take: take,
         skip: (page - 1) * take,
         include: {
@@ -42,9 +42,7 @@ export const getOrdersByUser = async ({
         },
       }),
 
-      prisma.order.count({
-        where: { userId },
-      }),
+      prisma.order.count(),
     ]);
 
     const totalPages = Math.ceil(totalCount / take);
