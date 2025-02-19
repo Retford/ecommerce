@@ -9,7 +9,7 @@ export interface Product {
   tags: string[];
   title: string;
   //todo: type: Types;
-  gender: 'men' | 'women' | 'kid' | 'unisex';
+  gender: Category;
 }
 
 export interface CartProduct {
@@ -22,6 +22,12 @@ export interface CartProduct {
   image: string;
 }
 
-export type Category = 'men' | 'women' | 'kid' | 'unisex';
+export interface ProductImage {
+  id: number;
+  url: string;
+  productId?: string;
+}
+
+type Category = 'men' | 'women' | 'kid' | 'unisex';
 export type Size = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
 export type Types = 'shirts' | 'pants' | 'hoodies' | 'hats';
