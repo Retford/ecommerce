@@ -3,11 +3,18 @@
 import { useForm } from 'react-hook-form';
 
 import type { Category } from '@/interfaces/category.interface';
-import type { Product, ProductImage } from '@/interfaces/product.interface';
-import Image from 'next/image';
+import type {
+  Product,
+  ProductImage as ProductWithImage,
+} from '@/interfaces/product.interface';
+import clsx from 'clsx';
+import { createUpdateProduct } from '@/actions/products/create-update-product';
+import { useRouter } from 'next/navigation';
+import { ProductImage } from '@/components/product/product-image/ProductImage';
+import { deleteProductImage } from '@/actions/products/delete-product-image';
 
 interface Props {
-  product: Product & { ProductImage?: ProductImage[] };
+  product: Partial<Product> & { ProductImage?: ProductWithImage[] };
   categories: Category[];
 }
 
@@ -23,25 +30,80 @@ interface FormInputs {
   tags: string;
   gender: 'men' | 'women' | 'kid' | 'unisex';
   categoryId: string;
-  //   Todo: Images;
+  images?: FileList;
 }
 
 export const ProductForm = ({ product, categories }: Props) => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
+    getValues,
+    setValue,
+    watch,
     formState: { isValid },
   } = useForm<FormInputs>({
     defaultValues: {
       ...product,
-      tags: product.tags.join(', '),
+      tags: product.tags?.join(', '),
       sizes: product.sizes ?? [],
-      //   Todo: Images
+      images: undefined,
     },
   });
 
+  watch('sizes');
+
   const onSubmit = async (data: FormInputs) => {
-    console.log({ data });
+    const formData = new FormData();
+
+    const { images, ...productToSave } = data;
+
+    if (product.id) {
+      formData.append('id', product.id ?? '');
+    }
+    formData.append('title', productToSave.title);
+    formData.append('slug', productToSave.slug);
+    formData.append('description', productToSave.description);
+    formData.append('price', productToSave.price.toString());
+    formData.append('inStock', productToSave.inStock.toString());
+    formData.append('sizes', productToSave.sizes.toString());
+    formData.append('tags', productToSave.tags);
+    formData.append('categoryId', productToSave.categoryId);
+    formData.append('gender', productToSave.gender);
+
+    if (images) {
+      for (let i = 0; i < images.length; i++) {
+        formData.append('images', images[i]);
+      }
+    }
+
+    const { ok, product: updatedProduct } = await createUpdateProduct(formData);
+
+    if (!ok) {
+      // TODO: agregar un mensaje bonito
+      alert('Producto no se pudo actualizar');
+      return;
+    }
+
+    router.replace(`/admin/product/${updatedProduct?.slug}`);
+  };
+
+  const onSizeChange = (size: string) => {
+    // Solution: with some and filter
+    // const sizes = getValues('sizes');
+
+    // const newSizes = sizes.some((s) => s === size)
+    //   ? sizes.filter((s) => s !== size)
+    //   : [...sizes, size];
+    // setValue('sizes', newSizes);
+
+    // Solution: with Set
+    const sizes = new Set(getValues('sizes'));
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    sizes.has(size) ? sizes.delete(size) : sizes.add(size);
+
+    setValue('sizes', Array.from(sizes));
   };
 
   return (
@@ -131,6 +193,15 @@ export const ProductForm = ({ product, categories }: Props) => {
       </div>
       {/* Selector de tallas y fotos */}
       <div className='w-full'>
+        {/* inStock */}
+        <div className='flex flex-col mb-2'>
+          <span>Inventario</span>
+          <input
+            type='number'
+            className='p-2 border rounded-md bg-gray-200'
+            {...register('inStock', { required: true, min: 0 })}
+          />
+        </div>
         {/* As checkboxes */}
         <div className='flex flex-col'>
           <span>Tallas</span>
@@ -138,8 +209,14 @@ export const ProductForm = ({ product, categories }: Props) => {
             {sizes.map((size) => (
               // bg-blue-500 text-white <--- si está seleccionado
               <div
+                onClick={() => onSizeChange(size)}
                 key={size}
-                className='flex  items-center justify-center w-10 h-10 mr-2 border rounded-md'
+                className={clsx(
+                  'p-2 border cursor-pointer rounded-md mr-2 mb-2 w-14 transition-all text-center',
+                  {
+                    'bg-blue-500 text-white': getValues('sizes').includes(size),
+                  }
+                )}
               >
                 <span>{size}</span>
               </div>
@@ -151,24 +228,27 @@ export const ProductForm = ({ product, categories }: Props) => {
             <input
               type='file'
               multiple
+              {...register('images', { required: true, min: 2 })}
               className='p-2 border rounded-md bg-gray-200'
-              accept='image/png, image/jpeg'
+              accept='image/png, image/jpeg, image/avif'
             />
           </div>
 
           <div className='grid grid-cols-1 sm:grid-cols-3 gap-3'>
             {product.ProductImage?.map((image) => (
               <div key={image.id}>
-                <Image
+                <ProductImage
+                  src={image.url}
                   alt={product.title ?? ''}
-                  src={`/products/${image.url}`}
                   width={300}
                   height={300}
                   className='rounded-t shadow-md'
                 />
                 <button
                   type='button'
-                  onClick={() => console.log(image.id, image.url)}
+                  onClick={async () =>
+                    await deleteProductImage(image.id, image.url)
+                  }
                   className='btn-danger w-full rounded-b-xl'
                 >
                   Eliminar

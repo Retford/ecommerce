@@ -10,27 +10,14 @@ export const authConfig: NextAuthConfig = {
     newUser: '/auth/new-account',
   },
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      // console.log({ auth });
-      // const isLoggedIn = !!auth?.user;
-      // const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
-      // if (isOnDashboard) {
-      //   if (isLoggedIn) return true;
-      //   return false; // Redirect unauthenticated users to login page
-      // } else if (isLoggedIn) {
-      //   return Response.redirect(new URL('/dashboard', nextUrl));
-      // }
-      return true;
-    },
     jwt({ token, user }) {
       if (user) {
         token.data = user;
       }
-      // console.log({ token, user });
       return token;
     },
-    session({ session, token, user }) {
-      // console.log({ session, token, user });
+    session({ session, token }) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       session.user = token.data as any;
       return session;
     },
@@ -57,6 +44,7 @@ export const authConfig: NextAuthConfig = {
         if (!bcryptjs.compareSync(password, user.password)) return null;
 
         // Regresar el usuario sin el password
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password: _, ...rest } = user;
 
         return rest;
