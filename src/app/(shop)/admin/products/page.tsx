@@ -5,7 +5,6 @@ import { Pagination } from '@/components/ui/pagination/Pagination';
 import { getPaginatedProductsWithImages } from '@/actions/products/product-pagination';
 import { currencyFormat } from '@/utils/currencyFormat';
 import { ProductImage } from '@/components/product/product-image/ProductImage';
-import { Suspense } from 'react';
 
 interface Props {
   searchParams: Promise<{ page: string }>;
@@ -20,7 +19,7 @@ export default async function ProductsPage({ searchParams }: Props) {
   });
 
   return (
-    <Suspense fallback={<div>Cargando...</div>}>
+    <>
       <Title title='Mantenimiento de productos' />
       <div className='flex justify-end mb-5'>
         <Link href='/admin/product/new' className='btn-primary'>
@@ -121,6 +120,6 @@ export default async function ProductsPage({ searchParams }: Props) {
         </table>
         <Pagination totalPages={totalPages} />
       </div>
-    </Suspense>
+    </>
   );
 }
