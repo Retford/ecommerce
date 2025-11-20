@@ -62,7 +62,7 @@ export const AddToCart = ({ product }: Props) => {
       <button
         onClick={addToCart}
         className='btn-primary my-5 disabled:select-none disabled:bg-blue-800'
-        disabled={!size}
+        // disabled={!size}
       >
         Agregar al carrito
       </button>
